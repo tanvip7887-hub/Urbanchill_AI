@@ -46,7 +46,7 @@ function FormattedMessageText({ text }: { text: string }) {
         // Subheaders like ### Title
         if (trimmed.startsWith('### ')) {
           return (
-            <div key={lIdx} className="font-bold text-emerald-300 text-xs mt-1 mb-0.5 tracking-wide">
+            <div key={lIdx} className="font-bold text-emerald-600 dark:text-emerald-300 text-xs mt-1 mb-0.5 tracking-wide">
               {renderInlineTokens(trimmed.replace('### ', ''))}
             </div>
           );
@@ -58,9 +58,9 @@ function FormattedMessageText({ text }: { text: string }) {
         return (
           <div
             key={lIdx}
-            className={isBullet ? 'pl-2 text-gray-200 flex items-start gap-1.5' : 'text-gray-200'}
+            className={isBullet ? 'pl-2 text-gray-700 dark:text-gray-200 flex items-start gap-1.5' : 'text-gray-700 dark:text-gray-200'}
           >
-            {isBullet && <span className="text-emerald-400 font-bold shrink-0 mt-0.5">•</span>}
+            {isBullet && <span className="text-emerald-500 dark:text-emerald-400 font-bold shrink-0 mt-0.5">•</span>}
             <span>{renderInlineTokens(isBullet ? trimmed.replace(/^[-*]\s+|\d+\.\s+/, '') : trimmed)}</span>
           </div>
         );
@@ -319,7 +319,7 @@ export default function VoiceAgentWidget({
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 15, scale: 0.96 }}
           transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
-          className="fixed top-20 right-4 sm:right-[335px] xl:right-[355px] z-50 w-[420px] max-w-[calc(100vw-22rem)] h-[560px] max-h-[calc(100vh-7.5rem)] flex flex-col rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100 backdrop-blur-2xl shadow-2xl overflow-hidden"
+          className="fixed bottom-6 right-4 sm:right-6 z-50 w-[380px] sm:w-[410px] max-w-[calc(100vw-2rem)] h-[540px] max-h-[calc(100vh-5rem)] flex flex-col rounded-2xl bg-white/97 dark:bg-gray-900/97 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100 backdrop-blur-2xl shadow-2xl overflow-hidden"
         >
           {/* Window Header */}
           <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200 dark:border-gray-700 bg-gray-50/80 dark:bg-gray-800/80">

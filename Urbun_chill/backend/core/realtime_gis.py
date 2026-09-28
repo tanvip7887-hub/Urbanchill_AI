@@ -559,12 +559,12 @@ def generate_realtime_spatial_grid(
                 ]
             
             # Spatial micro-climate variations based on distance and orientation
-            cell_b_dens = round(max(0.10, min(0.92, base_bdens * (1.1 - dist * 0.45) + math.sin(row * 1.7) * 0.06)), 2)
-            cell_ndvi = round(max(0.04, min(0.85, base_ndvi + (dist * 0.12) - (cell_b_dens * 0.12) + math.cos(col * 1.8) * 0.04)), 2)
-            cell_g_cover = round(max(0.04, min(0.75, cell_ndvi * 0.88)), 2)
+            cell_b_dens = round(max(0.08, min(0.92, base_bdens * (1.18 - dist * 0.58) + math.sin(row * 1.7) * 0.06)), 2)
+            cell_ndvi = round(max(0.06, min(0.85, base_ndvi + (dist * 0.22) - (cell_b_dens * 0.15) + math.cos(col * 1.8) * 0.05)), 2)
+            cell_g_cover = round(max(0.05, min(0.78, cell_ndvi * 0.88)), 2)
             
-            # Surface thermal physics: building mass raises surface heat; vegetation provides cooling
-            lst_mod = (cell_b_dens - 0.5) * 4.5 - ((cell_ndvi - 0.25) * 5.0)
+            # Biophysical thermal physics: dense impervious mass traps heat; vegetative canopy transpires cooling
+            lst_mod = (cell_b_dens - 0.45) * 5.6 - ((cell_ndvi - 0.22) * 7.0)
             cell_lst = round(max(15.0, min(58.0, base_lst + lst_mod)), 1)
             cell_pop = int(max(1000, min(30000, base_pop * (1.15 - dist * 0.55))))
             cell_road = round(cell_b_dens * 18.0, 1)
@@ -626,7 +626,14 @@ def generate_realtime_spatial_grid(
             "total_sectors": len(features),
             "generated_at": datetime.datetime.now(datetime.timezone.utc).isoformat(),
             "data_quality_score": base_metrics.get("dataQuality", {}).get("score", 85),
-            "model_version": base_metrics.get("modelVersion", "urbanchill-rf-1.1")
+            "model_version": base_metrics.get("modelVersion", "urbanchill-rf-1.1"),
+            "ambient_temp": base_metrics.get("ambientTemp", 30.0),
+            "apparent_temp": base_metrics.get("apparentTemp", 32.0),
+            "skin_temp": base_metrics.get("lst", 34.0),
+            "humidity": base_metrics.get("humidity", 50),
+            "direct_radiation": base_rad,
+            "weather_condition": base_metrics.get("weatherCondition", "Clear Sky"),
+            "air_quality_index": base_metrics.get("airQualityIndex", 75),
         },
         "features": features
     }

@@ -25,7 +25,9 @@ def get_db_connection():
     DB_DIR.mkdir(parents=True, exist_ok=True)
     try:
         _CONNECTION = duckdb.connect(str(DB_PATH), read_only=False)
-    except Exception:
+    except Exception as e:
+        print(f"[UrbanChill DB CRITICAL] Persistent DuckDB unavailable at {DB_PATH}: {e}")
+        print("[UrbanChill DB CRITICAL] Falling back to IN-MEMORY database — ALL history will be lost on restart!")
         _CONNECTION = duckdb.connect(':memory:')
         
     return _CONNECTION

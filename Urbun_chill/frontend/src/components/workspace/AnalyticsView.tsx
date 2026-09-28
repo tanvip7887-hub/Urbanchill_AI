@@ -154,9 +154,6 @@ export default function AnalyticsView({
                 <h4 className="text-sm font-bold text-gray-900 dark:text-gray-100">
                   Citizen Emergency Heatwave Advisory & Circular
                 </h4>
-                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/30">
-                  WhatsApp + SMS + Voice Ready
-                </span>
               </div>
               <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
                 Elevated surface temperatures detected in {cityName} ({lst.toFixed(1)}°C, {heatRisk} Risk). Issue formatted emergency advisories to ward groups and residents.

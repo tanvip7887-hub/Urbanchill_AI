@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Layers, Eye, EyeOff, Thermometer, Leaf, AlertTriangle, Building, Sliders, ChevronDown } from 'lucide-react';
+import { Layers, Eye, EyeOff, Thermometer, Leaf, AlertTriangle, Building, Sliders, ChevronDown, Wind } from 'lucide-react';
 import { useState } from 'react';
 
 interface LayerItem {
@@ -11,6 +11,7 @@ interface LayerItem {
   color: string;
   description: string;
   defaultOn: boolean;
+  badge?: string;
 }
 
 const LAYERS: LayerItem[] = [
@@ -18,6 +19,7 @@ const LAYERS: LayerItem[] = [
   { id: 'ndvi', label: 'Vegetation Index Proxy (NDVI)', icon: <Leaf className="w-4 h-4" />, color: '#2a85ff', description: 'Estimated canopy density proxy from urban morphology', defaultOn: true },
   { id: 'heat_risk', label: 'ML Heat-Risk Zones', icon: <AlertTriangle className="w-4 h-4" />, color: '#2a85ff', description: 'Random Forest surrogate predictions per spatial model sector', defaultOn: true },
   { id: 'land_use', label: 'Urban Morphology & Buildings', icon: <Building className="w-4 h-4" />, color: '#2a85ff', description: 'Building footprints & road density massing', defaultOn: false },
+  { id: 'no2', label: 'NO₂ Air Quality Layer', icon: <Wind className="w-4 h-4" />, color: '#0ea5e9', description: 'NO₂ concentration grid from CAMS reanalysis (observed)', defaultOn: false, badge: 'NEW' },
 ];
 
 function SkeletonBlock({ w = 'w-full', h = 'h-3' }: { w?: string; h?: string }) {
@@ -111,9 +113,14 @@ export default function LayersSidebar({
                   }`}
                 >
                   <div className="flex items-center justify-between mb-1.5">
-                    <div className="flex items-center gap-2">
-                      <span className="text-primary">{layer.icon}</span>
-                      <span className="text-gray-900 dark:text-gray-100 text-xs font-semibold">{layer.label}</span>
+                    <div className="flex items-center gap-2 flex-1 min-w-0">
+                      <span style={{ color: layer.color }}>{layer.icon}</span>
+                      <span className="text-gray-900 dark:text-gray-100 text-xs font-semibold truncate">{layer.label}</span>
+                      {layer.badge && (
+                        <span className="text-[9px] px-1 py-0.5 rounded bg-sky-500/10 text-sky-500 font-bold flex-shrink-0">
+                          {layer.badge}
+                        </span>
+                      )}
                     </div>
                     <button
                       onClick={() => toggleLayer(layer.id)}

@@ -13,6 +13,7 @@ from pydantic import BaseModel, Field
 from typing import Dict, Any, Optional
 
 from core.realtime_gis import compute_realtime_metrics, geocode_location
+from core.gis_service import CITY_PROFILES
 
 router = APIRouter()
 
@@ -33,37 +34,45 @@ def estimate_local_time(lon: float) -> str:
     offset_str = f"UTC{sign}{abs(int(offset_hours)):02d}:{int(abs(offset_hours) % 1 * 60):02d}"
     return f"{local_dt.strftime('%H:%M')} ({offset_str})"
 
-@router.post("/compare")
-async def compare_cities(req: CompareRequest):
-    """
-    Compares two urban regions side-by-side across live Land Surface Temperature proxy,
-    vegetation proxy, physical heat hazard, and vulnerability exposure.
-    Includes diurnal status and comparability validation.
-    """
-    name_a = req.city_a.strip()
-    lat_a = req.lat_a
-    lon_a = req.lon_a
+async def do_compare_cities(
+    city_a_name: str,
+    city_b_name: str,
+    lat_a: Optional[float] = None,
+    lon_a: Optional[float] = None,
+    lat_b: Optional[float] = None,
+    lon_b: Optional[float] = None
+):
+    name_a = city_a_name.strip()
+
     if lat_a is None or lon_a is None:
         geo_a = geocode_location(name_a)
         if geo_a:
             lat_a, lon_a, resolved_a = geo_a
             if resolved_a:
                 name_a = resolved_a
+        elif any(k.lower() == name_a.lower() for k in CITY_PROFILES):
+            matched_key = next(k for k in CITY_PROFILES if k.lower() == name_a.lower())
+            lat_a = CITY_PROFILES[matched_key]["lat"]
+            lon_a = CITY_PROFILES[matched_key]["lon"]
+            name_a = matched_key
         else:
             raise HTTPException(
                 status_code=404,
                 detail=f"Unable to resolve city for comparison: '{name_a}'. Please check the spelling or specify coordinates."
             )
 
-    name_b = req.city_b.strip()
-    lat_b = req.lat_b
-    lon_b = req.lon_b
+    name_b = city_b_name.strip()
     if lat_b is None or lon_b is None:
         geo_b = geocode_location(name_b)
         if geo_b:
             lat_b, lon_b, resolved_b = geo_b
             if resolved_b:
                 name_b = resolved_b
+        elif any(k.lower() == name_b.lower() for k in CITY_PROFILES):
+            matched_key = next(k for k in CITY_PROFILES if k.lower() == name_b.lower())
+            lat_b = CITY_PROFILES[matched_key]["lat"]
+            lon_b = CITY_PROFILES[matched_key]["lon"]
+            name_b = matched_key
         else:
             raise HTTPException(
                 status_code=404,
@@ -87,7 +96,7 @@ async def compare_cities(req: CompareRequest):
         "is_day": is_day_a,
         "diurnal_phase": "Daylight (Solar Insolation Active)" if is_day_a else "Nocturnal (Radiative Cooling)",
         "avg_lst": metrics_a["lst"],
-        "max_lst": round(metrics_a["lst"] + 4.8, 1),
+        "max_lst": round(metrics_a["lst"] + (metrics_a["buildingDensity"] * 7.5), 1),
         "ambient_temp": metrics_a["ambientTemp"],
         "weather_condition": metrics_a["weatherCondition"],
         "ndvi": metrics_a["ndvi"],
@@ -109,7 +118,7 @@ async def compare_cities(req: CompareRequest):
         "is_day": is_day_b,
         "diurnal_phase": "Daylight (Solar Insolation Active)" if is_day_b else "Nocturnal (Radiative Cooling)",
         "avg_lst": metrics_b["lst"],
-        "max_lst": round(metrics_b["lst"] + 4.8, 1),
+        "max_lst": round(metrics_b["lst"] + (metrics_b["buildingDensity"] * 7.5), 1),
         "ambient_temp": metrics_b["ambientTemp"],
         "weather_condition": metrics_b["weatherCondition"],
         "ndvi": metrics_b["ndvi"],
@@ -158,3 +167,48 @@ async def compare_cities(req: CompareRequest):
         "comparative_summary": summary,
         "data_provenance_note": "Telemetry retrieved synchronously from live meteorological reanalysis and vector morphology."
     }
+
+@router.post("/compare")
+async def compare_cities_post(req: CompareRequest):
+    """POST endpoint for comparative city analysis."""
+    return await do_compare_cities(
+        city_a_name=req.city_a,
+        city_b_name=req.city_b,
+        lat_a=req.lat_a,
+        lon_a=req.lon_a,
+        lat_b=req.lat_b,
+        lon_b=req.lon_b
+    )
+
+@router.get("/compare")
+async def compare_cities_get(
+    city_a: Optional[str] = None,
+    city_b: Optional[str] = None,
+    cities: Optional[str] = None,
+    lat_a: Optional[float] = None,
+    lon_a: Optional[float] = None,
+    lat_b: Optional[float] = None,
+    lon_b: Optional[float] = None
+):
+    """GET endpoint for comparative city analysis supporting query params or comma-separated cities."""
+    if cities:
+        parts = [p.strip() for p in cities.split(",") if p.strip()]
+        if len(parts) >= 2:
+            city_a = parts[0]
+            city_b = parts[1]
+        elif len(parts) == 1:
+            city_a = parts[0]
+            city_b = "Phoenix"
+
+    first_city = city_a or "Pune"
+    second_city = city_b or "Phoenix"
+
+    return await do_compare_cities(
+        city_a_name=first_city,
+        city_b_name=second_city,
+        lat_a=lat_a,
+        lon_a=lon_a,
+        lat_b=lat_b,
+        lon_b=lon_b
+    )
+

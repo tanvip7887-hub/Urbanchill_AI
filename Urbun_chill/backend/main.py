@@ -26,7 +26,8 @@ from api.routes import (
     report,
     history,
     mlops,
-    agent
+    agent,
+    air_quality
 )
 
 @asynccontextmanager
@@ -42,8 +43,8 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(
     title="UrbanChill AI Backend",
-    version="1.0.0",
-    description="Geo-Intelligent Digital Twin Platform API for Urban Heat Resilience",
+    version="2.0.0",
+    description="Urban Environmental Digital Twin — Heat Resilience + Air Quality (NO2) Intelligence Platform",
     lifespan=lifespan
 )
 
@@ -66,7 +67,9 @@ from fastapi.responses import JSONResponse
 
 @app.exception_handler(Exception)
 async def global_exception_handler(request: Request, exc: Exception):
-    print(f"[UrbanChill Server Error] Path: {request.url.path} | Error: {exc}")
+    import traceback
+    print(f"[UrbanChill Server Error] Path: {request.url.path}")
+    print(traceback.format_exc())  # Full trace in server logs only
     return JSONResponse(
         status_code=500,
         content={
@@ -74,7 +77,6 @@ async def global_exception_handler(request: Request, exc: Exception):
             "error": {
                 "code": "SERVER_PROCESSING_ERROR",
                 "message": "An error occurred while processing the geospatial telemetry request. Please verify city name or retry.",
-                "details": str(exc),
                 "retryable": True
             }
         }
@@ -91,15 +93,20 @@ app.include_router(report.router, prefix="/api", tags=["Report Generation"])
 app.include_router(history.router, prefix="/api", tags=["Analysis History"])
 app.include_router(mlops.router, prefix="/api", tags=["MLOps & Monitoring"])
 app.include_router(agent.router, prefix="/api", tags=["Voice Agent"])
+app.include_router(air_quality.router, prefix="/api", tags=["Air Quality (ENR-01)"])
 app.include_router(region.router, prefix="/api", tags=["Legacy Region"])
 
 @app.get("/")
 async def root():
     return {
         "name": "UrbanChill AI API",
-        "version": "1.0.0",
+        "version": "2.0.0",
         "status": "online",
-        "architecture": "Geo-Intelligent Digital Twin (5-Layer Modular Architecture)",
+        "architecture": "Urban Environmental Digital Twin (5-Layer Modular Architecture)",
+        "modules": {
+            "heat_pipeline": "LST/NDVI heat risk analysis (existing)",
+            "air_quality_module": "NO2 air quality branch (ENR-01 — HackMatrix 5.0 Track 03)"
+        },
         "endpoints": [
             "/api/analyze",
             "/api/prediction",
@@ -111,6 +118,11 @@ async def root():
             "/api/report/download",
             "/api/history",
             "/api/mlops/status",
+            "/api/air-quality/{city}",
+            "/api/air-quality/attribute",
+            "/api/simulate/pollution",
+            "/api/air-quality/validate",
+            "/api/air-quality/hotspots/{city}",
             "/docs"
         ]
     }

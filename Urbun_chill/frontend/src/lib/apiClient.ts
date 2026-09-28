@@ -411,4 +411,258 @@ export async function fetchVoiceAgentResponse(
   return (await res.json()) as VoiceAgentResponse;
 }
 
+// ═══════════════════════════════════════════════════════════════════════════
+// AIR QUALITY MODULE — ENR-01 (HackMatrix 5.0 Track 03)
+// ═══════════════════════════════════════════════════════════════════════════
 
+export type NO2RiskLevel = 'Good' | 'Moderate' | 'High' | 'Critical';
+export type DataSource = 'observed' | 'modeled';
+
+export interface NO2GridCell {
+  cell_id: string;
+  no2_value: number;
+  unit: string;
+  source: DataSource;
+  date: string;
+  lat: number;
+  lon: number;
+}
+
+export interface NO2RiskClassification {
+  level: NO2RiskLevel;
+  source: DataSource;
+}
+
+export interface AirQualityResult {
+  city: string;
+  lat: number;
+  lon: number;
+  date: string;
+  avg_no2: number;
+  unit: string;
+  city_risk_level: NO2RiskLevel;
+  data_source: string;
+  grid: NO2GridCell[];
+  risk_classification: Record<string, NO2RiskClassification>;
+  observed_vs_modeled: {
+    grid_source: string;
+    risk_source: string;
+    note: string;
+  };
+  assumptions: string[];
+}
+
+export interface SourceAttributionResult {
+  cell_id: string;
+  no2_value: number;
+  unit: string;
+  traffic_pct: number;
+  industrial_pct: number;
+  weather_pct: number;
+  residential_pct: number;
+  source: DataSource;
+  attribution_method: string;
+  assumptions: string[];
+}
+
+export interface PollutionCellResult {
+  cell_id: string;
+  baseline_no2: number;
+  projected_no2: number;
+  delta: number;
+  delta_pct: number;
+  reduction_breakdown: {
+    from_traffic_restriction: number;
+    from_industrial_control: number;
+    from_green_buffer: number;
+    from_vehicle_emission_standards: number;
+    total_no2_reduction: number;
+  };
+  source: DataSource;
+  methodology: string;
+}
+
+export interface PollutionScenario {
+  id: string;
+  name: string;
+  description: string;
+  actions: Record<string, number>;
+  est_no2_reduction_pct: number;
+}
+
+export interface PollutionSimResult {
+  city: string;
+  date: string;
+  actions_applied: Record<string, number>;
+  cell_results: PollutionCellResult[];
+  city_aggregate: {
+    total_cells: number;
+    cells_improved: number;
+    avg_baseline_no2: number;
+    avg_projected_no2: number;
+    avg_delta: number;
+    avg_delta_pct: number;
+    unit: string;
+    source: DataSource;
+  };
+  scenario_comparison: PollutionScenario[];
+  source: DataSource;
+  scientific_disclaimer: {
+    model_notice: string;
+    methodology: string;
+    limitations: string;
+  };
+}
+
+export interface ValidationPeriod {
+  period_label: string;
+  date_range: string;
+  predicted_avg_no2: number;
+  observed_avg_no2: number;
+  delta_pct: number;
+  validation_note: string;
+  source_observed: string;
+  source_predicted: string;
+}
+
+export interface ValidationResult {
+  city: string;
+  current_avg_no2: number;
+  unit: string;
+  validation_periods: ValidationPeriod[];
+  methodology_note: string;
+  source: DataSource;
+}
+
+export interface HotspotFeature {
+  type: 'Feature';
+  properties: {
+    cell_id: string;
+    no2_value: number;
+    unit: string;
+    risk_level: NO2RiskLevel;
+    source_no2: DataSource;
+    source_risk: DataSource;
+    date: string;
+    lat: number;
+    lon: number;
+    exceeds_who_guideline: boolean;
+    exceeds_eu_limit: boolean;
+  };
+  geometry: {
+    type: 'Polygon';
+    coordinates: number[][][];
+  };
+}
+
+export interface HotspotResult {
+  type: 'FeatureCollection';
+  city: string;
+  date: string;
+  threshold_ugm3: number;
+  total_cells_analyzed: number;
+  hotspot_count: number;
+  features: HotspotFeature[];
+  legend: Record<string, string>;
+  data_sources: Record<string, string>;
+}
+
+// ── 10. Air Quality — Current NO2 Grid ──────────────────────────────────────
+export async function fetchAirQuality(
+  city: string,
+  lat?: number,
+  lon?: number
+): Promise<AirQualityResult> {
+  let url = `${API_BASE}/air-quality/${encodeURIComponent(city)}`;
+  const params: string[] = [];
+  if (lat !== undefined) params.push(`lat=${lat}`);
+  if (lon !== undefined) params.push(`lon=${lon}`);
+  if (params.length) url += '?' + params.join('&');
+
+  const res = await fetch(url);
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.detail || `Air quality fetch failed for '${city}' (${res.status})`);
+  }
+  return (await res.json()) as AirQualityResult;
+}
+
+// ── 11. Air Quality — Source Attribution ────────────────────────────────────
+export async function fetchSourceAttribution(
+  city: string,
+  cellId: string,
+  lat?: number,
+  lon?: number
+): Promise<SourceAttributionResult> {
+  const res = await fetch(`${API_BASE}/air-quality/attribute`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ city, cell_id: cellId, lat, lon }),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.detail || `Source attribution failed (${res.status})`);
+  }
+  return (await res.json()) as SourceAttributionResult;
+}
+
+// ── 12. Air Quality — Pollution Simulation ──────────────────────────────────
+export async function simulatePollutionReduction(
+  city: string,
+  actions: {
+    traffic_restriction_pct?: number;
+    industrial_control_pct?: number;
+    green_buffer_pct?: number;
+    vehicle_emission_standard_pct?: number;
+  },
+  lat?: number,
+  lon?: number
+): Promise<PollutionSimResult> {
+  const res = await fetch(`${API_BASE}/simulate/pollution`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ city, actions, lat, lon }),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.detail || `Pollution simulation failed (${res.status})`);
+  }
+  return (await res.json()) as PollutionSimResult;
+}
+
+// ── 13. Air Quality — Historical Validation ─────────────────────────────────
+export async function fetchAirQualityValidation(
+  city: string,
+  lat?: number,
+  lon?: number
+): Promise<ValidationResult> {
+  let url = `${API_BASE}/air-quality/validate?city=${encodeURIComponent(city)}`;
+  if (lat !== undefined) url += `&lat=${lat}`;
+  if (lon !== undefined) url += `&lon=${lon}`;
+
+  const res = await fetch(url);
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.detail || `Validation fetch failed (${res.status})`);
+  }
+  return (await res.json()) as ValidationResult;
+}
+
+// ── 14. Air Quality — Hotspot GeoJSON ───────────────────────────────────────
+export async function fetchAirQualityHotspots(
+  city: string,
+  lat?: number,
+  lon?: number,
+  threshold = 40.0
+): Promise<HotspotResult> {
+  let url = `${API_BASE}/air-quality/hotspots/${encodeURIComponent(city)}?threshold=${threshold}`;
+  if (lat !== undefined) url += `&lat=${lat}`;
+  if (lon !== undefined) url += `&lon=${lon}`;
+
+  const res = await fetch(url);
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.detail || `Hotspot fetch failed (${res.status})`);
+  }
+  return (await res.json()) as HotspotResult;
+}

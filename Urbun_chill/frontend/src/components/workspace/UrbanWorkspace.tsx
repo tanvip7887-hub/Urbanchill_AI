@@ -18,6 +18,7 @@ import CityComparisonView from './CityComparisonView';
 import MlopsDashboardView from './MlopsDashboardView';
 import VoiceAgentWidget from './VoiceAgentWidget';
 import EcmeThemeConfigurator from '@/components/template/EcmeThemeConfigurator';
+import AirQualityDashboard from '@/components/workspace/AirQualityDashboard';
 import { downloadPdfReport, type SimulationResult } from '@/lib/apiClient';
 import type { AppState, CityResult, AnalyzeResult } from '@/lib/globeConfig';
 
@@ -50,12 +51,14 @@ export default function UrbanWorkspace({
     ndvi: true,
     heat_risk: true,
     land_use: false,
+    no2: false,  // Air quality NO2 layer (toggleable alongside heat layers)
   });
   const [layerOpacities, setLayerOpacities] = useState<Record<string, number>>({
     lst: 80,
     ndvi: 80,
     heat_risk: 80,
     land_use: 60,
+    no2: 75,
   });
 
   // Copilot voice assistant state
@@ -64,9 +67,9 @@ export default function UrbanWorkspace({
   // Ecme Theme Configurator slide-over drawer state
   const [isThemeConfigOpen, setIsThemeConfigOpen] = useState(false);
 
-  // Time Slider State
+  // Time Slider State (defaults to false so map is clean until user clicks Yearly Trends)
   const [selectedYear, setSelectedYear] = useState<number>(2026);
-  const [isTimeSliderActive, setIsTimeSliderActive] = useState<boolean>(true);
+  const [isTimeSliderActive, setIsTimeSliderActive] = useState<boolean>(false);
 
   // Active Simulation Applied (optional)
   const [activeSimResult, setActiveSimResult] = useState<SimulationResult | null>(null);
@@ -101,8 +104,8 @@ export default function UrbanWorkspace({
         isTimeSliderActive={isTimeSliderActive}
         onExportPdf={handleExportPdf}
         onReturnToGlobe={onReset}
-        dataQualityScore={95}
-        modelVersion="urbanchill-rf-1.1"
+        dataQualityScore={analyzeData?.dataQuality?.score ?? 95}
+        modelVersion={analyzeData?.modelVersion ?? 'urbanchill-rf-1.1'}
         cityName={city.name}
       />
 
@@ -135,12 +138,19 @@ export default function UrbanWorkspace({
                 activeLayers={activeLayers}
                 layerOpacities={layerOpacities}
                 selectedYear={selectedYear}
+                isTimeSliderActive={isTimeSliderActive}
+                onToggleTimeSlider={() => setIsTimeSliderActive((v) => !v)}
               />
 
               {/* Historical Time Slider Bar (Centered STRICTLY over the 3D Map) */}
               {isTimeSliderActive && (
-                <div className="absolute bottom-5 left-1/2 -translate-x-1/2 z-30 pointer-events-auto hidden sm:block max-w-[90%]">
-                  <TimeSliderBar currentYear={selectedYear} onYearChange={setSelectedYear} />
+                <div className="absolute bottom-5 left-1/2 -translate-x-1/2 z-30 pointer-events-auto block max-w-[90%]">
+                  <TimeSliderBar
+                    currentYear={selectedYear}
+                    onYearChange={setSelectedYear}
+                    cityName={city.name}
+                    onClose={() => setIsTimeSliderActive(false)}
+                  />
                 </div>
               )}
             </div>
@@ -178,6 +188,19 @@ export default function UrbanWorkspace({
               onReturnToMap={() => setActiveView('map')}
             />
           )}
+
+          {/* ── Air Quality Module View (ENR-01) ─────────────────────── */}
+          {activeView === 'air_quality' && (
+            <div className="flex-1 w-full h-full min-w-0 overflow-hidden flex flex-col">
+              <AirQualityDashboard
+                cityName={city.name}
+                lat={city.lat}
+                lon={city.lon}
+                onReturnToMap={() => setActiveView('map')}
+              />
+            </div>
+          )}
+
         </div>
       </div>
 

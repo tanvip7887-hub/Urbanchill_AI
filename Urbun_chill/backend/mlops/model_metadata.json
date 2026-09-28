@@ -2,13 +2,13 @@
   "model_name": "UrbanChill_HeatRisk_RandomForest",
   "model_version": "urbanchill-rf-1.1",
   "framework": "scikit-learn",
-  "sklearn_version": "1.4.2",
+  "sklearn_version": "1.9.1",
   "python_version": "3.12.2",
   "algorithm": "RandomForestClassifier (Calibrated)",
   "calibration_status": "Calibrated via 5-fold Sigmoid Platt Scaling",
   "dataset_version": "synthetic-benchmark-v2",
   "scientific_notice": "Trained on domain-guided synthetic surrogate benchmark according to IPCC urban heat vulnerability rubrics.",
-  "training_timestamp": "2026-09-23T16:11:00.582407+00:00",
+  "training_timestamp": "2026-09-28T02:58:11.781507+00:00",
   "n_samples": 2200,
   "n_features": 7,
   "feature_names": [
@@ -35,26 +35,26 @@
     "calibration_method": "sigmoid"
   },
   "metrics": {
-    "accuracy": 0.8545,
-    "test_accuracy": 0.8545,
-    "f1_macro": 0.8428,
-    "test_macro_f1": 0.8428,
-    "test_weighted_f1": 0.8547,
-    "test_precision_macro": 0.8507,
-    "test_recall_macro": 0.8362,
-    "cv_5fold_macro_f1_mean": 0.814,
-    "cv_5fold_macro_f1_std": 0.0341,
+    "accuracy": 0.8523,
+    "test_accuracy": 0.8523,
+    "f1_macro": 0.8484,
+    "test_macro_f1": 0.8484,
+    "test_weighted_f1": 0.8525,
+    "test_precision_macro": 0.851,
+    "test_recall_macro": 0.847,
+    "cv_5fold_macro_f1_mean": 0.8088,
+    "cv_5fold_macro_f1_std": 0.0364,
     "confusion_matrix": [
       [
-        123,
-        24,
+        122,
+        25,
         0,
         0
       ],
       [
-        14,
-        163,
-        9,
+        13,
+        162,
+        11,
         0
       ],
       [
@@ -66,58 +66,58 @@
       [
         0,
         0,
-        4,
-        14
+        3,
+        15
       ]
     ],
     "detailed_report": {
       "Low": {
-        "precision": 0.8978102189781022,
-        "recall": 0.8367346938775511,
-        "f1-score": 0.8661971830985915,
+        "precision": 0.9037037037037037,
+        "recall": 0.8299319727891157,
+        "f1-score": 0.8652482269503546,
         "support": 147.0
       },
       "Moderate": {
-        "precision": 0.8274111675126904,
-        "recall": 0.8763440860215054,
-        "f1-score": 0.8511749347258486,
+        "precision": 0.8223350253807107,
+        "recall": 0.8709677419354839,
+        "f1-score": 0.8459530026109661,
         "support": 186.0
       },
       "High": {
-        "precision": 0.8539325842696629,
+        "precision": 0.8444444444444444,
         "recall": 0.8539325842696629,
-        "f1-score": 0.8539325842696629,
+        "f1-score": 0.8491620111731844,
         "support": 89.0
       },
       "Critical": {
-        "precision": 0.8235294117647058,
-        "recall": 0.7777777777777778,
-        "f1-score": 0.8,
+        "precision": 0.8333333333333334,
+        "recall": 0.8333333333333334,
+        "f1-score": 0.8333333333333334,
         "support": 18.0
       },
-      "accuracy": 0.8545454545454545,
+      "accuracy": 0.8522727272727273,
       "macro avg": {
-        "precision": 0.8506708456312904,
-        "recall": 0.8361972854866242,
-        "f1-score": 0.8428261755235258,
+        "precision": 0.850954126715548,
+        "recall": 0.847041408081899,
+        "f1-score": 0.8484241435169596,
         "support": 440.0
       },
       "weighted avg": {
-        "precision": 0.8561366108156958,
-        "recall": 0.8545454545454545,
-        "f1-score": 0.8546580085784108,
+        "precision": 0.8544416243654822,
+        "recall": 0.8522727272727273,
+        "f1-score": 0.8525321973676256,
         "support": 440.0
       }
     }
   },
   "feature_importances": {
-    "lst": 0.3035,
-    "building_density": 0.1872,
-    "ndvi": 0.1679,
-    "green_cover": 0.1237,
-    "population_density": 0.1021,
-    "road_density": 0.0815,
-    "dist_water_body": 0.0341
+    "lst": 0.3096,
+    "building_density": 0.1839,
+    "ndvi": 0.1688,
+    "green_cover": 0.125,
+    "population_density": 0.1026,
+    "road_density": 0.0778,
+    "dist_water_body": 0.0323
   },
   "baseline_feature_distributions": {
     "lst": {

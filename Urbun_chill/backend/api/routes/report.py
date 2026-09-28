@@ -49,8 +49,8 @@ async def create_report(req: ReportRequest):
             "lst": base_lst,
             "ndvi": base_ndvi,
             "uvIndex": 8 if base_lst > 38 else 6,
-            "humidity": 44,
-            "airQualityIndex": 72,
+            "humidity": profile.get("humidity", 50),
+            "airQualityIndex": profile.get("air_quality_index", 75),
             "recommendations": [
                 f"Plant targeted canopy corridors in {profile['name']} central and industrial zones",
                 "Install high-albedo cool roofs on public and commercial properties",

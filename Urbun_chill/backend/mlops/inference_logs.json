@@ -1090,5 +1090,383 @@
     },
     "prediction": "High",
     "confidence": 0.5331
+  },
+  {
+    "timestamp": "2026-09-24T03:03:53.634376+00:00",
+    "inputs": {
+      "lst": 29.3,
+      "ndvi": 0.14,
+      "building_density": 0.84,
+      "road_density": 15.4,
+      "population_density": 20160,
+      "green_cover": 0.11,
+      "dist_water_body": 950.0
+    },
+    "prediction": "High",
+    "confidence": 0.4722
+  },
+  {
+    "timestamp": "2026-09-24T03:05:34.420678+00:00",
+    "inputs": {
+      "lst": 28.8,
+      "ndvi": 0.23,
+      "building_density": 0.58,
+      "road_density": 28.0,
+      "population_density": 13919,
+      "green_cover": 0.2,
+      "dist_water_body": 950.0
+    },
+    "prediction": "High",
+    "confidence": 0.5227
+  },
+  {
+    "timestamp": "2026-09-24T03:05:35.136796+00:00",
+    "inputs": {
+      "lst": 41.5,
+      "ndvi": 0.15,
+      "building_density": 0.8,
+      "road_density": 16.0,
+      "population_density": 22000.0,
+      "green_cover": 0.1,
+      "dist_water_body": 2500.0
+    },
+    "prediction": "High",
+    "confidence": 0.5331
+  },
+  {
+    "timestamp": "2026-09-24T03:20:07.137466+00:00",
+    "inputs": {
+      "lst": 28.8,
+      "ndvi": 0.22,
+      "building_density": 0.58,
+      "road_density": 28.0,
+      "population_density": 13919,
+      "green_cover": 0.2,
+      "dist_water_body": 950.0
+    },
+    "prediction": "High",
+    "confidence": 0.5188
+  },
+  {
+    "timestamp": "2026-09-24T03:20:07.829022+00:00",
+    "inputs": {
+      "lst": 41.5,
+      "ndvi": 0.15,
+      "building_density": 0.8,
+      "road_density": 16.0,
+      "population_density": 22000.0,
+      "green_cover": 0.1,
+      "dist_water_body": 2500.0
+    },
+    "prediction": "High",
+    "confidence": 0.5331
+  },
+  {
+    "timestamp": "2026-09-24T03:26:38.983171+00:00",
+    "inputs": {
+      "lst": 29.2,
+      "ndvi": 0.38,
+      "building_density": 0.33,
+      "road_density": 28.0,
+      "population_density": 7920,
+      "green_cover": 0.36,
+      "dist_water_body": 950.0
+    },
+    "prediction": "Moderate",
+    "confidence": 0.6425
+  },
+  {
+    "timestamp": "2026-09-24T03:31:42.309262+00:00",
+    "inputs": {
+      "lst": 32.1,
+      "ndvi": 0.13,
+      "building_density": 0.84,
+      "road_density": 15.4,
+      "population_density": 20160,
+      "green_cover": 0.11,
+      "dist_water_body": 950.0
+    },
+    "prediction": "High",
+    "confidence": 0.4814
+  },
+  {
+    "timestamp": "2026-09-24T03:44:01.480484+00:00",
+    "inputs": {
+      "lst": 32.1,
+      "ndvi": 0.13,
+      "building_density": 0.84,
+      "road_density": 15.4,
+      "population_density": 20160,
+      "green_cover": 0.11,
+      "dist_water_body": 950.0
+    },
+    "prediction": "High",
+    "confidence": 0.4814
+  },
+  {
+    "timestamp": "2026-09-24T04:09:21.170267+00:00",
+    "inputs": {
+      "lst": 32.4,
+      "ndvi": 0.12,
+      "building_density": 0.84,
+      "road_density": 15.4,
+      "population_density": 20160,
+      "green_cover": 0.11,
+      "dist_water_body": 950.0
+    },
+    "prediction": "High",
+    "confidence": 0.4823
+  },
+  {
+    "timestamp": "2026-09-24T04:14:41.701965+00:00",
+    "inputs": {
+      "lst": 29.6,
+      "ndvi": 0.21,
+      "building_density": 0.58,
+      "road_density": 28.0,
+      "population_density": 13919,
+      "green_cover": 0.2,
+      "dist_water_body": 950.0
+    },
+    "prediction": "High",
+    "confidence": 0.5011
+  },
+  {
+    "timestamp": "2026-09-24T04:17:54.796309+00:00",
+    "inputs": {
+      "lst": 32.7,
+      "ndvi": 0.12,
+      "building_density": 0.84,
+      "road_density": 15.4,
+      "population_density": 20160,
+      "green_cover": 0.11,
+      "dist_water_body": 950.0
+    },
+    "prediction": "High",
+    "confidence": 0.4818
+  },
+  {
+    "timestamp": "2026-09-24T04:20:26.949571+00:00",
+    "inputs": {
+      "lst": 32.7,
+      "ndvi": 0.12,
+      "building_density": 0.84,
+      "road_density": 15.4,
+      "population_density": 20160,
+      "green_cover": 0.11,
+      "dist_water_body": 950.0
+    },
+    "prediction": "High",
+    "confidence": 0.4818
+  },
+  {
+    "timestamp": "2026-09-24T04:50:37.779954+00:00",
+    "inputs": {
+      "lst": 36.4,
+      "ndvi": 0.11,
+      "building_density": 0.84,
+      "road_density": 15.4,
+      "population_density": 20160,
+      "green_cover": 0.11,
+      "dist_water_body": 950.0
+    },
+    "prediction": "High",
+    "confidence": 0.6409
+  },
+  {
+    "timestamp": "2026-09-24T05:23:04.411104+00:00",
+    "inputs": {
+      "lst": 36.7,
+      "ndvi": 0.1,
+      "building_density": 0.84,
+      "road_density": 15.4,
+      "population_density": 20160,
+      "green_cover": 0.11,
+      "dist_water_body": 950.0
+    },
+    "prediction": "High",
+    "confidence": 0.653
+  },
+  {
+    "timestamp": "2026-09-24T06:46:37.816322+00:00",
+    "inputs": {
+      "lst": 39.3,
+      "ndvi": 0.09,
+      "building_density": 0.84,
+      "road_density": 15.4,
+      "population_density": 20160,
+      "green_cover": 0.11,
+      "dist_water_body": 950.0
+    },
+    "prediction": "High",
+    "confidence": 0.647
+  },
+  {
+    "timestamp": "2026-09-24T06:50:47.065569+00:00",
+    "inputs": {
+      "lst": 38.1,
+      "ndvi": 0.18,
+      "building_density": 0.58,
+      "road_density": 28.0,
+      "population_density": 13919,
+      "green_cover": 0.2,
+      "dist_water_body": 950.0
+    },
+    "prediction": "High",
+    "confidence": 0.8196
+  },
+  {
+    "timestamp": "2026-09-24T06:50:47.621097+00:00",
+    "inputs": {
+      "lst": 41.5,
+      "ndvi": 0.15,
+      "building_density": 0.8,
+      "road_density": 16.0,
+      "population_density": 22000.0,
+      "green_cover": 0.1,
+      "dist_water_body": 2500.0
+    },
+    "prediction": "High",
+    "confidence": 0.5331
+  },
+  {
+    "timestamp": "2026-09-27T13:29:56.706029+00:00",
+    "inputs": {
+      "lst": 27.0,
+      "ndvi": 0.12,
+      "building_density": 0.84,
+      "road_density": 15.4,
+      "population_density": 20160,
+      "green_cover": 0.11,
+      "dist_water_body": 950.0
+    },
+    "prediction": "High",
+    "confidence": 0.4734
+  },
+  {
+    "timestamp": "2026-09-28T02:58:44.840942+00:00",
+    "inputs": {
+      "lst": 27.2,
+      "ndvi": 0.24,
+      "building_density": 0.58,
+      "road_density": 28.0,
+      "population_density": 13919,
+      "green_cover": 0.2,
+      "dist_water_body": 950.0
+    },
+    "prediction": "High",
+    "confidence": 0.5081
+  },
+  {
+    "timestamp": "2026-09-28T02:59:50.792117+00:00",
+    "inputs": {
+      "lst": 27.6,
+      "ndvi": 0.15,
+      "building_density": 0.84,
+      "road_density": 15.4,
+      "population_density": 20160,
+      "green_cover": 0.11,
+      "dist_water_body": 950.0
+    },
+    "prediction": "High",
+    "confidence": 0.4734
+  },
+  {
+    "timestamp": "2026-09-28T03:00:27.690568+00:00",
+    "inputs": {
+      "lst": 27.6,
+      "ndvi": 0.15,
+      "building_density": 0.84,
+      "road_density": 15.4,
+      "population_density": 20160,
+      "green_cover": 0.11,
+      "dist_water_body": 950.0
+    },
+    "prediction": "High",
+    "confidence": 0.4734
+  },
+  {
+    "timestamp": "2026-09-28T03:10:49.673254+00:00",
+    "inputs": {
+      "lst": 27.6,
+      "ndvi": 0.15,
+      "building_density": 0.84,
+      "road_density": 15.4,
+      "population_density": 20160,
+      "green_cover": 0.11,
+      "dist_water_body": 950.0
+    },
+    "prediction": "High",
+    "confidence": 0.4734
+  },
+  {
+    "timestamp": "2026-09-28T03:13:49.254500+00:00",
+    "inputs": {
+      "lst": 27.6,
+      "ndvi": 0.15,
+      "building_density": 0.84,
+      "road_density": 15.4,
+      "population_density": 20160,
+      "green_cover": 0.11,
+      "dist_water_body": 950.0
+    },
+    "prediction": "High",
+    "confidence": 0.4734
+  },
+  {
+    "timestamp": "2026-09-28T03:17:44.917693+00:00",
+    "inputs": {
+      "lst": 27.7,
+      "ndvi": 0.14,
+      "building_density": 0.84,
+      "road_density": 15.4,
+      "population_density": 20160,
+      "green_cover": 0.11,
+      "dist_water_body": 950.0
+    },
+    "prediction": "High",
+    "confidence": 0.4734
+  },
+  {
+    "timestamp": "2026-09-28T03:18:04.538077+00:00",
+    "inputs": {
+      "lst": 27.7,
+      "ndvi": 0.14,
+      "building_density": 0.84,
+      "road_density": 15.4,
+      "population_density": 20160,
+      "green_cover": 0.11,
+      "dist_water_body": 950.0
+    },
+    "prediction": "High",
+    "confidence": 0.4734
+  },
+  {
+    "timestamp": "2026-09-28T03:27:21.911192+00:00",
+    "inputs": {
+      "lst": 27.2,
+      "ndvi": 0.23,
+      "building_density": 0.58,
+      "road_density": 28.0,
+      "population_density": 13919,
+      "green_cover": 0.2,
+      "dist_water_body": 950.0
+    },
+    "prediction": "High",
+    "confidence": 0.521
+  },
+  {
+    "timestamp": "2026-09-28T03:43:45.056877+00:00",
+    "inputs": {
+      "lst": 32.7,
+      "ndvi": 0.14,
+      "building_density": 0.84,
+      "road_density": 15.4,
+      "population_density": 20160,
+      "green_cover": 0.11,
+      "dist_water_body": 950.0
+    },
+    "prediction": "High",
+    "confidence": 0.4358
   }
 ]

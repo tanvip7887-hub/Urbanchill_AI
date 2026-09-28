@@ -22,9 +22,10 @@ import {
   Eye,
   EyeOff,
   BarChart3,
+  Wind,
 } from 'lucide-react';
 
-export type WorkspaceView = 'map' | 'analytics' | 'simulation' | 'comparison' | 'mlops';
+export type WorkspaceView = 'map' | 'analytics' | 'simulation' | 'comparison' | 'mlops' | 'air_quality';
 
 interface EcmeSideNavProps {
   isCollapsed: boolean;
@@ -250,6 +251,33 @@ export default function EcmeSideNav({
               {!isCollapsed && <span>Cooling Simulator</span>}
             </button>
 
+            {/* ── Air Quality Module (ENR-01) ──────────────────────── */}
+            <button
+              onClick={() => onSelectView('air_quality')}
+              className={`
+                group w-full flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold
+                transition-colors cursor-pointer
+                ${
+                  activeView === 'air_quality'
+                    ? 'bg-sky-500/10 text-sky-500 dark:bg-sky-500/15 font-bold'
+                    : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-700/60 dark:hover:text-gray-100'
+                }
+                ${isCollapsed ? 'justify-center' : ''}
+              `}
+              title="Air Quality Intelligence — NO₂ (ENR-01)"
+            >
+              <Wind className={`w-4 h-4 shrink-0 ${activeView === 'air_quality' ? 'text-sky-500' : 'text-gray-400 dark:text-gray-500 group-hover:text-sky-500'}`} />
+              {!isCollapsed && (
+                <div className="flex items-center justify-between w-full">
+                  <span>Air Quality (NO₂)</span>
+                  {activeView !== 'air_quality' && (
+                    <span className="text-[9px] px-1.5 py-0.5 rounded bg-sky-500/10 text-sky-500 font-bold">NEW</span>
+                  )}
+                  {activeView === 'air_quality' && <span className="h-2 w-2 rounded-full bg-sky-500 animate-pulse" />}
+                </div>
+              )}
+            </button>
+
             <button
               onClick={() => onSelectView('comparison')}
               className={`
@@ -270,8 +298,14 @@ export default function EcmeSideNav({
 
             <button
               onClick={() => {
-                onSelectView('map');
-                onToggleTimeSlider();
+                if (activeView !== 'map') {
+                  onSelectView('map');
+                  if (!isTimeSliderActive) {
+                    onToggleTimeSlider();
+                  }
+                } else {
+                  onToggleTimeSlider();
+                }
               }}
               className={`
                 group w-full flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold

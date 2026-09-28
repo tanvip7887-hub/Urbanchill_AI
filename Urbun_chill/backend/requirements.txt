@@ -6,8 +6,6 @@ joblib>=1.4.0
 reportlab>=4.0.0
 pillow>=10.0.0
 scipy>=1.12.0
-rioxarray==0.15.0
-pystac-client==0.8.2
 pytest==8.2.2
 python-dotenv==1.0.1
 pydantic>=2.7.0
