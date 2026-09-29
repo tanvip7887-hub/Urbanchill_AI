@@ -41,6 +41,90 @@ UrbanChill AI follows a modular, cloud-based 5-layer architecture. The air-quali
 5. **Data Layer** — stores users, analysis history, spatial datasets, air-quality readings, attribution, and validation records.
    *(PostgreSQL, PostGIS)*
 
+## 🗺️ System Diagram
+
+```mermaid
+flowchart TB
+    subgraph Presentation["Presentation Layer"]
+        UI[React + TypeScript Dashboard]
+        Globe[CesiumJS 3D Globe]
+        Sim1[Cooling Simulator]
+        Sim2[Pollution Simulator]
+    end
+
+    subgraph Application["Application Layer"]
+        API[FastAPI Backend]
+    end
+
+    subgraph GIS["GIS Processing Layer"]
+        Heat[Heat Processing<br/>LST + NDVI]
+        Air[Air Quality Processing<br/>NO2 + Proxies]
+    end
+
+    subgraph ML["Machine Learning Layer"]
+        RF1[Random Forest<br/>Heat-Risk Model]
+        RF2[Random Forest<br/>Pollution Risk + Attribution]
+    end
+
+    subgraph Data["Data Layer"]
+        DB[(PostgreSQL + PostGIS)]
+    end
+
+    subgraph External["External Data Sources"]
+        GEE[Google Earth Engine<br/>Landsat-8 / Sentinel-2 / Sentinel-5P]
+        Weather[Open-Meteo API]
+    end
+
+    UI --> Globe
+    UI --> Sim1
+    UI --> Sim2
+    Globe --> API
+    Sim1 --> API
+    Sim2 --> API
+
+    API --> Heat
+    API --> Air
+    Heat --> GEE
+    Air --> GEE
+    Air --> Weather
+
+    Heat --> RF1
+    Air --> RF2
+
+    RF1 --> DB
+    RF2 --> DB
+    API --> DB
+    DB --> API
+    API --> UI
+```
+
+## 🔄 User Flow Diagram
+
+```mermaid
+flowchart TD
+    Start([User opens UrbanChill AI]) --> Search[Search or select a city on 3D globe]
+    Search --> Fetch[Backend fetches satellite + weather data]
+    Fetch --> Process[Compute LST, NDVI, NO2 for the city grid]
+    Process --> Predict[ML predicts heat-risk and pollution-risk per cell]
+    Predict --> Attribute[Source attribution: traffic, industrial, weather, residential]
+    Attribute --> Display[Dashboard shows hotspot map<br/>tagged Observed or Modeled]
+
+    Display --> Choice{User wants to test<br/>an intervention?}
+    Choice -->|Yes - Heat| CoolSim[Open Cooling Simulator<br/>adjust trees, roofs, parks, water]
+    Choice -->|Yes - Air Quality| PollSim[Open Pollution Simulator<br/>adjust traffic, industrial, green buffer]
+    Choice -->|No| Validate
+
+    CoolSim --> Apply1[Apply scenario]
+    PollSim --> Apply2[Apply scenario]
+    Apply1 --> Recalc[Per-cell projected impact<br/>animated on 3D map]
+    Apply2 --> Recalc
+    Recalc --> Compare[Compare results across scenarios]
+    Compare --> Validate
+
+    Validate[View Historical Validation<br/>predicted vs observed] --> Report[Generate PDF report]
+    Report --> End([Planner makes an informed decision])
+```
+
 ## 💻 Technology Stack
 
 ### Frontend (`/frontend`)
